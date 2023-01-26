@@ -1,33 +1,52 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Framework.Core.Applications;
+using Framework.Library.Common;
+using Framework.Library.Projects;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Core.Controllers
+namespace Framework.Core.Controllers
 {
     [Route("[controller]")]
     [ApiController]
     public class ProjectsController : ControllerBase
     {
-        [HttpGet]
-        public async IActionResult GetListOfProjectsAsync()
+        private readonly ProjectsApplication _app;
+
+        public ProjectsController(ProjectsApplication application)
         {
-            return Ok();
+            _app = application;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetListOfProjectsAsync(RangeQueryParameter parameters)
+        {
+            RangeQueryResult<ProjectInformation> listOfProjects = await _app.GetListOfAllProjects(parameters);
+            return Ok(listOfProjects);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetProjectAsync(long id)
+        {
+            return Ok(await _app.GetAsync(id));
         }
 
         [HttpPost]
-        public async IActionResult CreateProjectAsync()
+        public async Task<IActionResult> CreateProjectAsync(CreateProjectParameter parameters)
         {
-            return Created();
+            ProjectInformation newProject = await _app.CreateProjectAsync(parameters);
+            return Created(newProject.Id.ToString(), newProject.Id);
         }
 
         [HttpPut("{id}")]
-        public async IActionResult ModifyProjectAsync(int id)
+        public async Task<IActionResult> ModifyProjectAsync(long id, RenameProjectParameter parameters)
         {
-            return Ok();
+            ProjectInformation targetProject = await _app.RenameProjectAsync(id, parameters);
+            return Ok(targetProject);
         }
 
         [HttpDelete("{id}")]
-        public async IActionResult DeleteProjectAsync(int id)
+        public async Task<IActionResult> DeleteProjectAsync(long id)
         {
+            await _app.DeleteProjectAsync(id);
             return Ok();
         }
     }
