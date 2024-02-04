@@ -1,7 +1,7 @@
-﻿using Aurora.Framework.Data.Entities;
+﻿using Aurora.Core.Data.Entities;
 using Aurora.Library.Accounts;
 
-namespace Aurora.Framework.Applications.Extensions
+namespace Aurora.Core.Applications.Extensions
 {
     /// <summary>
     /// Extension methods for account at application level.

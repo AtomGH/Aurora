@@ -1,7 +1,7 @@
 ﻿using Aurora.Library.Operators;
 using System.Security.AccessControl;
 
-namespace Aurora.Framework.Data.Entities
+namespace Aurora.Core.Data.Entities
 {
     /// <summary>
     /// The operator entity.

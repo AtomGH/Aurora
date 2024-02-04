@@ -1,11 +1,11 @@
-﻿using Aurora.Framework.Data;
-using Aurora.Framework.Data.Extensions;
-using Aurora.Framework.Data.Entities;
+﻿using Aurora.Core.Data;
+using Aurora.Core.Data.Extensions;
+using Aurora.Core.Data.Entities;
 using Aurora.Library.Common;
 using Aurora.Library.Accounts;
-using Aurora.Framework.Applications.Extensions;
+using Aurora.Core.Applications.Extensions;
 
-namespace Aurora.Framework.Applications
+namespace Aurora.Core.Applications
 {
     /// <summary>
     /// The interact to interact with accounts, contains all the business logic for accounts.

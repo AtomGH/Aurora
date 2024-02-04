@@ -1,4 +1,4 @@
-﻿namespace Aurora.Framework.Data.Extensions
+﻿namespace Aurora.Core.Data.Extensions
 {
     /// <summary>
     /// The extension methods for data services.

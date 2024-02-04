@@ -2,7 +2,7 @@
 using Aurora.Library.Accounts;
 using Microsoft.EntityFrameworkCore;
 
-namespace Aurora.Framework.Data.Entities
+namespace Aurora.Core.Data.Entities
 {
     /// <summary>
     /// User account entity.

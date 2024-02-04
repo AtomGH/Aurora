@@ -1,9 +1,9 @@
-﻿using Aurora.Framework.Data.Entities;
+﻿using Aurora.Core.Data.Entities;
 using Aurora.Library.Common;
 using Aurora.Library.Accounts;
 using Microsoft.EntityFrameworkCore;
 
-namespace Aurora.Framework.Data.Services
+namespace Aurora.Core.Data.Services
 {
     /// <summary>
     /// Entity repository for services.

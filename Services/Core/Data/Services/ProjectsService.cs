@@ -1,8 +1,8 @@
-﻿using Aurora.Framework.Data.Entities;
+﻿using Aurora.Core.Data.Entities;
 using Aurora.Library.Common;
 using Microsoft.EntityFrameworkCore;
 
-namespace Aurora.Framework.Data.Services
+namespace Aurora.Core.Data.Services
 {
     /// <summary>
     /// Project service.

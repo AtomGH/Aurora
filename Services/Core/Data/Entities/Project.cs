@@ -1,7 +1,7 @@
 ﻿using Aurora.Library.Common;
 using Microsoft.EntityFrameworkCore;
 
-namespace Aurora.Framework.Data.Entities
+namespace Aurora.Core.Data.Entities
 {
     /// <summary>
     /// Project entity.

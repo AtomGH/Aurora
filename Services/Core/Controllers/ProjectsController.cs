@@ -1,4 +1,4 @@
-﻿using Aurora.Framework.Applications;
+﻿using Aurora.Core.Applications;
 using Aurora.Library.Common;
 using Aurora.Library.Projects;
 using Microsoft.AspNetCore.Mvc;
