@@ -1,10 +1,10 @@
-﻿using Aurora.Framework.Data;
-using Aurora.Framework.Data.Entities;
-using Aurora.Framework.Applications.Extensions;
+﻿using Aurora.Core.Data;
+using Aurora.Core.Data.Entities;
+using Aurora.Core.Applications.Extensions;
 using Aurora.Library.Common;
 using Aurora.Library.Projects;
 
-namespace Aurora.Framework.Applications
+namespace Aurora.Core.Applications
 {
     /// <summary>
     /// Application layer that contains all bussiness logic to access projects.

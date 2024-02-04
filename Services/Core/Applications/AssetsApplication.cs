@@ -1,6 +1,6 @@
 ﻿using Aurora.Library.Assets;
 
-namespace Aurora.Framework.Applications
+namespace Aurora.Core.Applications
 {
     /// <summary>
     /// Application layer that contains all bussiness logic to access assets.

@@ -1,6 +1,6 @@
-﻿using Aurora.Framework.Data;
+﻿using Aurora.Core.Data;
 
-namespace Aurora.Framework.Applications
+namespace Aurora.Core.Applications
 {
     /// <summary>
     /// Extension methods for the applications.

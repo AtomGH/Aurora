@@ -1,4 +1,4 @@
-﻿namespace Aurora.Framework.Data
+﻿namespace Aurora.Core.Data
 {
     /// <summary>
     /// 
