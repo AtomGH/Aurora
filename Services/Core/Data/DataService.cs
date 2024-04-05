@@ -1,4 +1,5 @@
 ﻿using Aurora.Core.Data.Services;
+using Aurora.Library.Common;
 
 namespace Aurora.Core.Data
 {
@@ -22,11 +23,12 @@ namespace Aurora.Core.Data
         /// 
         /// </summary>
         /// <param name="context"></param>
-        public DataService(DatabaseContext context)
+        /// <param name="idGenerator"></param>
+        public DataService(DatabaseContext context, IdentifierGenerator idGenerator)
         {
             _context = context;
-            Accounts = new AccountsService(_context);
-            Projects = new ProjectsService(_context);
+            Accounts = new AccountsService(_context, idGenerator);
+            Projects = new ProjectsService(_context, idGenerator);
         }
 
         /// <summary>

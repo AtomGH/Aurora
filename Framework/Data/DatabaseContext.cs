@@ -9,7 +9,21 @@ namespace Aurora.Framework.Data
 
         protected override void OnConfiguring(DbContextOptionsBuilder builder)
         {
-            builder.UseNpgsql("Host=localhost;Database=aurora;Username=test;Password=test");
+            builder
+                .UseNpgsql("Host=localhost;Database=aurora;Username=postgres;Password=postgres")
+                .UseSnakeCaseNamingConvention();
+        }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            builder.HasDefaultSchema("framework");
+
+            builder.Entity<Instance>().HasKey(i => i.Id);
+            builder.Entity<Instance>().Property(i => i.Token);
+            builder.Entity<Instance>().Property(i => i.Hostname);
+            builder.Entity<Instance>().Property(i => i.LastRefreshTime);
+
+            base.OnModelCreating(builder);
         }
     }
 }

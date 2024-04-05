@@ -41,11 +41,13 @@ namespace Aurora.Core.Data.Entities
         /// Instantiate a project entity.
         /// </summary>
         /// <param name="context"></param>
+        /// <param name="id"></param>
         /// <param name="name"></param>
         /// <param name="description"></param>
         /// <param name="owner"></param>
-        public Project(DatabaseContext context, string name, string description, Account owner)
+        public Project(DatabaseContext context, long id, string name, string description, Account owner)
         {
+            Id = id;
             Name = name;
             Description = description;
             Owner = owner;
