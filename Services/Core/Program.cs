@@ -1,5 +1,7 @@
 using Aurora.Core.Data;
 using Aurora.Core.Data.Extensions;
+using Aurora.Library.Common;
+using Aurora.Library.Framework;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Identity.Web;
@@ -12,6 +14,9 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 builder.Services.AddDbContext<DatabaseContext>();
 builder.Services.AddDataService();
+builder.Services.AddSingleton<InstanceContext>();
+builder.Services.AddSingleton<FrameworkClient>();
+builder.Services.AddSingleton<IdentifierGenerator>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

@@ -10,14 +10,17 @@ namespace Aurora.Core.Data.Services
     public class ProjectsService
     {
         private readonly DatabaseContext _context;
+        private readonly IdentifierGenerator _idGenerator;
 
         /// <summary>
         /// Instantiate a project service.
         /// </summary>
         /// <param name="context"></param>
-        public ProjectsService(DatabaseContext context)
+        /// <param name="idGenerator"></param>
+        public ProjectsService(DatabaseContext context, IdentifierGenerator idGenerator)
         {
             _context = context;
+            _idGenerator = idGenerator;
         }
 
         /// <summary>
@@ -65,7 +68,7 @@ namespace Aurora.Core.Data.Services
         /// <returns></returns>
         public async Task<Project> AddAsync(string projectName, string projectDescription, Account projectOwner)
         {
-            Project newProject = new(_context, projectName, projectDescription, projectOwner);
+            Project newProject = new(_context, _idGenerator.Get(), projectName, projectDescription, projectOwner);
             await _context.Projects.AddAsync(newProject);
             return newProject;
         }

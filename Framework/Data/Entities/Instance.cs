@@ -7,6 +7,8 @@
         public string Hostname { get; } = string.Empty;
         public DateTime LastRefreshTime { get; private set; } = DateTime.UtcNow;
 
+        private Instance() { }
+
         public Instance(int id, string hostname)
         {
             Id = id;

@@ -36,11 +36,13 @@ namespace Aurora.Core.Data.Entities
         /// Instantiate an account.
         /// </summary>
         /// <param name="context">The database context.</param>
+        /// <param name="id">The account ID.</param>
         /// <param name="name">The account name.</param>
         /// <param name="type">The account type.</param>
-        public Account(DatabaseContext context, string name, AccountType type)
+        public Account(DatabaseContext context, long id, string name, AccountType type)
         {
             _context = context;
+            Id = id;
             Name = name;
             Type = type;
             Projects = new(this, _context);

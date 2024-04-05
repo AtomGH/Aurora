@@ -11,14 +11,17 @@ namespace Aurora.Core.Data.Services
     public class AccountsService
     {
         private readonly DatabaseContext _context;
+        private readonly IdentifierGenerator _idGenerator;
 
         /// <summary>
         /// Instantiate a service entity repository.
         /// </summary>
         /// <param name="context"></param>
-        public AccountsService(DatabaseContext context)
+        /// <param name="idGenerator"></param>
+        public AccountsService(DatabaseContext context, IdentifierGenerator idGenerator)
         {
             _context = context;
+            _idGenerator = idGenerator;
         }
 
         /// <summary>
@@ -65,7 +68,7 @@ namespace Aurora.Core.Data.Services
         /// <returns></returns>
         public async Task<Account> AddAsync(string accountName, AccountType type)
         {
-            Account newAccount = new(_context, accountName, type);
+            Account newAccount = new(_context, _idGenerator.Get(), accountName, type);
             await _context.Accounts.AddAsync(newAccount);
             return newAccount;
         }
