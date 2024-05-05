@@ -25,17 +25,6 @@ namespace Aurora.Core.Data.Services
         }
 
         /// <summary>
-        /// Get a list of accounts.
-        /// </summary>
-        /// <param name="start"></param>
-        /// <param name="limit"></param>
-        /// <returns></returns>
-        public async Task<List<Account>> GetAsync(long start, int limit)
-        {
-            return await _context.Accounts.LongSkip(start - 1).Take(limit).ToListAsync();
-        }
-
-        /// <summary>
         /// Get a specific account by ID.
         /// </summary>
         /// <param name="accountId"></param>
@@ -49,15 +38,6 @@ namespace Aurora.Core.Data.Services
                 throw new InvalidDataException("The account does not exist.");
             }
             return targetAccount;
-        }
-
-        /// <summary>
-        /// Count how many accounts exist.
-        /// </summary>
-        /// <returns></returns>
-        public async Task<long> CountAsync()
-        {
-            return await _context.Accounts.LongCountAsync();
         }
 
         /// <summary>

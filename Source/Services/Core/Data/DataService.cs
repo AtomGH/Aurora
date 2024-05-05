@@ -8,7 +8,7 @@ namespace Aurora.Core.Data
     /// </summary>
     public class DataService
     {
-        private readonly DatabaseContext _context;
+        public DatabaseContext Database { get; }
 
         /// <summary>
         /// 
@@ -18,6 +18,8 @@ namespace Aurora.Core.Data
         /// 
         /// </summary>
         public ProjectsService Projects { get; }
+        public PipelinesService Pipelines { get; }
+        public AssetsService Assets { get; }
 
         /// <summary>
         /// 
@@ -26,9 +28,11 @@ namespace Aurora.Core.Data
         /// <param name="idGenerator"></param>
         public DataService(DatabaseContext context, IdentifierGenerator idGenerator)
         {
-            _context = context;
-            Accounts = new AccountsService(_context, idGenerator);
-            Projects = new ProjectsService(_context, idGenerator);
+            Database = context;
+            Accounts = new AccountsService(Database, idGenerator);
+            Projects = new ProjectsService(Database, idGenerator);
+            Pipelines = new PipelinesService(Database);
+            Assets = new AssetsService(Database, idGenerator);
         }
 
         /// <summary>
@@ -38,7 +42,7 @@ namespace Aurora.Core.Data
         /// <returns></returns>
         public async Task SaveAsync(CancellationToken cancellationToken = default)
         {
-            await _context.SaveChangesAsync(cancellationToken);
+            await Database.SaveChangesAsync(cancellationToken);
         }
     }
 }

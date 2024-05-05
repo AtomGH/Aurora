@@ -9,7 +9,7 @@
     <DockerfileContext>..\..</DockerfileContext>
     <RootNamespace>Aurora.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
     <AssemblyName>Aurora.$(MSBuildProjectName)</AssemblyName>
-    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <GenerateDocumentationFile>False</GenerateDocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
