@@ -3,6 +3,7 @@ using Aurora.Core.Data.Entities;
 using Aurora.Core.Applications.Extensions;
 using Aurora.Library.Common;
 using Aurora.Library.Projects;
+using Microsoft.EntityFrameworkCore;
 
 namespace Aurora.Core.Applications
 {
@@ -29,10 +30,10 @@ namespace Aurora.Core.Applications
         /// <returns></returns>
         public async Task<RangeQueryResult<ProjectInformation>> GetListOfAllProjects(RangeQueryParameter parameters)
         {
-            List<Project> listOfProjects = await _data.Projects.GetAsync(parameters.Start, parameters.Limit);
+            List<Project> listOfProjects = await _data.Database.Projects.LongSkip(parameters.Start - 1).Take(parameters.Limit).ToListAsync();
             List<ProjectInformation> listOfProjectInformations = new();
             listOfProjects.ForEach(p => listOfProjectInformations.Add(p.ToInformation()));
-            long totalQuantity = await _data.Projects.CountAsync();
+            long totalQuantity = await _data.Database.Projects.CountAsync();
 
             return new RangeQueryResult<ProjectInformation>(totalQuantity, listOfProjectInformations);
         }

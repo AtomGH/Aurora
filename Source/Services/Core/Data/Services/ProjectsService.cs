@@ -24,17 +24,6 @@ namespace Aurora.Core.Data.Services
         }
 
         /// <summary>
-        /// Get a list of projects
-        /// </summary>
-        /// <param name="start"></param>
-        /// <param name="limit"></param>
-        /// <returns></returns>
-        public async Task<List<Project>> GetAsync(long start, int limit)
-        {
-            return await _context.Projects.LongSkip(start - 1).Take(limit).ToListAsync();
-        }
-
-        /// <summary>
         /// 
         /// </summary>
         /// <param name="projectId"></param>
@@ -48,15 +37,6 @@ namespace Aurora.Core.Data.Services
                 throw new InvalidOperationException("The project does not exist.");
             }
             return targetProject;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public async Task<long> CountAsync()
-        {
-            return await _context.Projects.LongCountAsync();
         }
 
         /// <summary>
