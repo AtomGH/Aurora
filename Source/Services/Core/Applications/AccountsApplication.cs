@@ -33,7 +33,7 @@ namespace Aurora.Core.Applications
         /// <returns>A range query result that contains a slice of result and the total quantity of the result.</returns>
         public async Task<RangeQueryResult<AccountInformation>> GetAllAccounts(RangeQueryParameter parameters)
         {
-            List<Account> listOfAccounts = await _context.Accounts.LongSkip(parameters.Start - 1).Take(parameters.Limit).ToListAsync();
+            List<Account> listOfAccounts = await _context.Accounts.Skip(parameters.Start - 1).Take(parameters.Limit).ToListAsync();
             List<AccountInformation> listOfAccountInformations = new();
             listOfAccounts.ForEach(a => listOfAccountInformations.Add(a.ToInformation()));
             long totalQuantity = await _context.Accounts.CountAsync();

@@ -29,7 +29,7 @@ namespace Aurora.Core.Applications
         /// <returns></returns>
         public async Task<RangeQueryResult<AssetInformation>> QueryAssetsAsync(QueryAssetParameters parameters)
         {
-            List<Asset> queryResult = await _data.Database.Assets.Where(a => a.Project.Id == parameters.ProjectId).LongSkip(parameters.Start - 1).Take(parameters.Limit).ToListAsync();
+            List<Asset> queryResult = await _data.Database.Assets.Where(a => a.Project.Id == parameters.ProjectId).Skip(parameters.Start - 1).Take(parameters.Limit).ToListAsync();
             List<AssetInformation> listOfInformations = new();
             foreach (Asset asset in queryResult)
             {
@@ -40,7 +40,7 @@ namespace Aurora.Core.Applications
             return new(totalQuantity, listOfInformations);
         }
 
-        public async Task<AssetInformation> GetAssetAsync(long projectId, long assetId)
+        public async Task<AssetInformation> GetAssetAsync(int projectId, int assetId)
         {
             Asset targetAsset = await _data.Assets.GetAssetAsync(projectId, assetId);
             return targetAsset.ToInformation();
@@ -52,8 +52,8 @@ namespace Aurora.Core.Applications
         public async Task<AssetInformation> CreateAssetAsync(CreateAssetParameters parameters)
         {
             Project targetProject = await _data.Projects.GetAsync(parameters.ProjectId);
-            AssetType targetType = await _data.Assets.GetAssetTypeAsync(parameters.ProjectId, parameters.TypeId);
-            Asset newAsset = await _data.Assets.AddAssetAsync(parameters.Name, parameters.Description, targetType, targetProject);
+            AssetKind targetKind = await _data.Assets.GetAssetKindAsync(parameters.ProjectId, parameters.TypeId);
+            Asset newAsset = await _data.Assets.AddAssetAsync(parameters.Name, parameters.Description, targetKind, targetProject);
             await _data.SaveAsync();
             return newAsset.ToInformation();
         }
@@ -61,48 +61,48 @@ namespace Aurora.Core.Applications
         /// <summary>
         /// Delete an asset.
         /// </summary>
-        public async Task DeleteAssetAsync(long id, long projectId)
+        public async Task DeleteAssetAsync(int projectId, int id)
         {
             await _data.Assets.RemoveAssetAsync(projectId, id);
             await _data.SaveAsync();
         }
 
-        public async Task<RangeQueryResult<AssetTypeInformation>> QueryAssetTypesAsync(long projectId, RangeQueryParameter parameters)
+        public async Task<RangeQueryResult<AssetTypeInformation>> QueryAssetTypesAsync(int projectId, RangeQueryParameter parameters)
         {
-            List<AssetType> listOfAssets = await _data.Database.AssetTypes.Where(a => a.Project.Id == projectId).LongSkip(parameters.Start - 1).Take(parameters.Limit).ToListAsync();
+            List<AssetKind> listOfAssets = await _data.Database.AssetKinds.Where(a => a.Project.Id == projectId).Skip(parameters.Start - 1).Take(parameters.Limit).ToListAsync();
             List<AssetTypeInformation> listOfInformations = new();
-            foreach (AssetType assetType in listOfAssets)
+            foreach (AssetKind assetType in listOfAssets)
             {
                 listOfInformations.Add(assetType.ToInformation());
             }
-            long totalQuantity = await _data.Database.AssetTypes.Where(a => a.Project.Id == projectId).CountAsync();
+            long totalQuantity = await _data.Database.AssetKinds.Where(a => a.Project.Id == projectId).CountAsync();
             return new(totalQuantity, listOfInformations);
         }
 
-        public async Task<AssetTypeInformation> GetAssetTypeAsync(long projectId, long assetTypeId)
+        public async Task<AssetTypeInformation> GetAssetTypeAsync(int projectId, int assetTypeId)
         {
-            AssetType targetType = await _data.Assets.GetAssetTypeAsync(projectId, assetTypeId);
-            return targetType.ToInformation();
+            AssetKind targetKind = await _data.Assets.GetAssetKindAsync(projectId, assetTypeId);
+            return targetKind.ToInformation();
         }
 
-        public async Task<AssetTypeInformation> AddAssetTypeAsync(long projectId, CreateAssetTypeParameters parameters)
+        public async Task<AssetTypeInformation> AddAssetTypeAsync(int projectId, CreateAssetTypeParameters parameters)
         {
             Project targetProject = await _data.Projects.GetAsync(projectId);
             Pipeline targetPipeline = await _data.Pipelines.GetPipelineAsync(projectId, parameters.PipelineId);
-            AssetType newAssetType = await _data.Assets.AddAssetTypeAsync(parameters.Name, parameters.Description, targetPipeline, targetProject);
+            AssetKind newAssetKind = await _data.Assets.AddAssetKindAsync(parameters.Name, parameters.Description, targetPipeline, targetProject);
             await _data.SaveAsync();
-            return newAssetType.ToInformation();
+            return newAssetKind.ToInformation();
         }
 
-        public async Task DeleteAssetTypeAsync(long projectId, long assetTypeId)
+        public async Task DeleteAssetTypeAsync(int projectId, int assetKindId)
         {
-            await _data.Assets.RemoveAssetTypeAsync(projectId, assetTypeId);
+            await _data.Assets.RemoveAssetKindAsync(projectId, assetKindId);
             await _data.SaveAsync();
         }
 
-        public async Task<RangeQueryResult<AssetVersionInformation>> QueryAssetVersionsAsync(long projectId, long assetId, RangeQueryParameter parameters)
+        public async Task<RangeQueryResult<AssetVersionInformation>> QueryAssetVersionsAsync(int projectId, int assetId, RangeQueryParameter parameters)
         {
-            List<AssetVersion> listOfVersions = await _data.Database.AssetVersions.Where(v => v.Asset.Id == assetId).LongSkip(parameters.Start - 1).Take(parameters.Limit).ToListAsync();
+            List<AssetVersion> listOfVersions = await _data.Database.AssetVersions.Where(v => v.Asset.Id == assetId && v.Asset.ProjectId == projectId).Skip(parameters.Start - 1).Take(parameters.Limit).ToListAsync();
             List<AssetVersionInformation> listOfInformations = new();
             foreach (AssetVersion version in listOfVersions)
             {
@@ -112,13 +112,13 @@ namespace Aurora.Core.Applications
             return new(totalQuantity, listOfInformations);
         }
 
-        public async Task<AssetVersionInformation> GetAssetVersionAsync(long projectId, long assetId, long versionId)
+        public async Task<AssetVersionInformation> GetAssetVersionAsync(int projectId, int assetId, int versionId)
         {
             AssetVersion targetVersion = await _data.Assets.GetAssetVersionAsync(projectId, assetId, versionId);
             return targetVersion.ToInformation();
         }
 
-        public async Task<AssetVersionInformation> AddAssetVersionAsync(long projectId, long assetId, CreateAssetVersionParameters parameters)
+        public async Task<AssetVersionInformation> AddAssetVersionAsync(int projectId, int assetId, CreateAssetVersionParameters parameters)
         {
             Asset targetAsset = await _data.Assets.GetAssetAsync(projectId, assetId);
             AssetVersion newVersion = await _data.Assets.AddAssetVersionAsync(parameters.Description, parameters.Preview, targetAsset);
@@ -127,7 +127,3 @@ namespace Aurora.Core.Applications
         }
     }
 }
-
-// Controller: Responsible for handling HTTP requests and returning responses, also it is a compatibility adaption layer for different version of the same API.
-// Application: The starting point of the bussiness logic, to manipulate bussiness data, this application layer is all you need, contains some high-level validation logic and data access logic, it is the first gate to prevent invalid data from entering the database.
-// Data: Interact with the database, S3, Redis, used to manipulate data, contains fundamental validation logic and all data access logic, it is the last gate to prevent invalid data from entering the database.

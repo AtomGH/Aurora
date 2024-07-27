@@ -20,6 +20,7 @@ namespace Aurora.Core.Applications.Extensions
                 Id = project.Id,
                 Name = project.Name,
                 Description = project.Description,
+                Type = project.Type,
                 OwnerId = project.Owner.Id
             };
         }

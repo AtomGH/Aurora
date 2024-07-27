@@ -41,7 +41,7 @@ namespace Framework.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetProjectAsync(long id)
+        public async Task<IActionResult> GetProjectAsync(int id)
         {
             return Ok(await _app.GetAsync(id));
         }
@@ -65,7 +65,7 @@ namespace Framework.Controllers
         /// <param name="parameters"></param>
         /// <returns></returns>
         [HttpPut("{id}")]
-        public async Task<IActionResult> ModifyProjectAsync(long id, RenameProjectParameters parameters)
+        public async Task<IActionResult> ModifyProjectAsync(int id, RenameProjectParameters parameters)
         {
             ProjectInformation targetProject = await _app.RenameProjectAsync(id, parameters);
             return Ok(targetProject);
@@ -77,7 +77,7 @@ namespace Framework.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteProjectAsync(long id)
+        public async Task<IActionResult> DeleteProjectAsync(int id)
         {
             await _app.DeleteProjectAsync(id);
             return Ok();

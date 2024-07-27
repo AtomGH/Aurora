@@ -2,29 +2,38 @@
 {
     public class Asset
     {
-        public long Id { get; private set; }
+        public int Id { get; private set; }
         public string Name { get; private set; }
         public string Description { get; private set; }
-        public AssetType Type { get; private set; }
+        public int KindId { get; private set; }
+        public AssetKind Kind { get; private set; }
+        public int ProjectId { get; private set; }
         public Project Project { get; private set; }
         public int VersionCounter { get; private set; }
+        public IQueryable<AssetVersion> Versions { get; private set; }
 
-        public Asset(string name, string description, AssetType type, Project project)
+        private readonly DatabaseContext _databaseContext;
+
+        public Asset(DatabaseContext context, string name, string description, AssetKind kind, Project project)
         {
+            _databaseContext = context;
             Name = name;
             Description = description;
-            Type = type;
+            Kind = kind;
             Project = project;
             VersionCounter = 0;
+            Versions = context.AssetVersions.Where(v => v.Asset.Id == Id);
         }
 
-        private Asset()
+        private Asset(DatabaseContext context)
         {
             // Required by EF Core
+            _databaseContext = context;
             Name = null!;
             Description = null!;
-            Type = null!;
+            Kind = null!;
             Project = null!;
+            Versions = null!;
         }
 
         public int IncreaseVersionCounter()

@@ -12,7 +12,7 @@ namespace Aurora.Core.Applications.Extensions
                 Id = asset.Id,
                 Name = asset.Name,
                 Description = asset.Description,
-                TypeId = asset.Type.Id,
+                TypeId = asset.Kind.Id,
                 ProjectId = asset.Project.Id,
             };
         }

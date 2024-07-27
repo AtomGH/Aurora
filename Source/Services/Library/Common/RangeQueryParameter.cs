@@ -11,11 +11,11 @@ namespace Aurora.Library.Common
     /// </summary>
     public class RangeQueryParameter
     {
-        private long _start = 1;
+        private int _start = 1;
         /// <summary>
         /// Where to start to query.
         /// </summary>
-        public long Start { get => _start; set => _start = value < 1 ? 1 : value; }
+        public int Start { get => _start; set => _start = value < 1 ? 1 : value; }
 
         private int _limit = 1000;
         /// <summary>

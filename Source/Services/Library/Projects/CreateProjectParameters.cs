@@ -19,9 +19,10 @@ namespace Aurora.Library.Projects
         /// The description of the new project.
         /// </summary>
         public string Description { get; set; } = string.Empty;
+        public ProjectType Type {  get; set; } = ProjectType.None;
         /// <summary>
         /// The ID of the account who will own the new project.
         /// </summary>
-        public long OwnerId { get; set; }
+        public int OwnerId { get; set; }
     }
 }

@@ -19,6 +19,6 @@ namespace Aurora.Library.Assets
         /// The description of the new asset type.
         /// </summary>
         public string Description { get; set; } = string.Empty;
-        public long PipelineId { get; set; }
+        public int PipelineId { get; set; }
     }
 }

@@ -22,15 +22,15 @@ namespace Aurora.Library.Assets
         /// <summary>
         /// The ID of the asset type for the asset, the asset type must be already exist.
         /// </summary>
-        public long TypeId { get; set; }
+        public int TypeId { get; set; }
         /// <summary>
         /// The ID of the project which the asset belongs to, the project must be already exist.
         /// </summary>
-        public long ProjectId { get; set; }
+        public int ProjectId { get; set; }
         /// <summary>
         /// The ID of the operator who will be used to store the asset.
         /// </summary>
-        public long OperatorId { get; set; }
+        public int OperatorId { get; set; }
         /// <summary>
         /// The token used to identify and access the asset from the operator.
         /// </summary>

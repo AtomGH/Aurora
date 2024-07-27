@@ -16,7 +16,7 @@ namespace Aurora.Core.Applications
             _data = data;
         }
 
-        public async Task<RangeQueryResult<PipelineInformation>> QueryPipelinesAsync(long projectId, RangeQueryParameter parameters)
+        public async Task<RangeQueryResult<PipelineInformation>> QueryPipelinesAsync(int projectId, RangeQueryParameter parameters)
         {
             List<Pipeline> pipelines = await _data.Database.Pipelines.Where(p => p.Project.Id == projectId).LongSkip(parameters.Start - 1).Take(parameters.Limit).ToListAsync();
             long totalQuantity = await _data.Database.Pipelines.Where(p => p.Project.Id == projectId).CountAsync();
@@ -28,13 +28,13 @@ namespace Aurora.Core.Applications
             return new RangeQueryResult<PipelineInformation>(totalQuantity, listOfInformations);
         }
 
-        public async Task<PipelineInformation> GetPipelineAsync(long projectId, long pipelineId)
+        public async Task<PipelineInformation> GetPipelineAsync(int projectId, int pipelineId)
         {
             Pipeline? targetPipeline = await _data.Pipelines.GetPipelineAsync(projectId, pipelineId);
             return targetPipeline.ToInformation();
         }
 
-        public async Task<PipelineInformation> CreatePipelineAsync(long projectId, CreatePipelineParameters parameters)
+        public async Task<PipelineInformation> CreatePipelineAsync(int projectId, CreatePipelineParameters parameters)
         {
             Project targetProject = await _data.Projects.GetAsync(projectId);
             Pipeline newPipeline = await _data.Pipelines.AddPipelineAsync(parameters.Name, parameters.Description, targetProject);
@@ -42,7 +42,7 @@ namespace Aurora.Core.Applications
             return newPipeline.ToInformation();
         }
 
-        public async Task<PipelineInformation> UpdatePipelineAsync(long projectId, long pipelineId, CreatePipelineParameters parameters)
+        public async Task<PipelineInformation> UpdatePipelineAsync(int projectId, int pipelineId, CreatePipelineParameters parameters)
         {
             Pipeline targetPipeline = await _data.Pipelines.GetPipelineAsync(projectId, pipelineId);
             targetPipeline.Name = parameters.Name;
@@ -56,7 +56,7 @@ namespace Aurora.Core.Applications
             return targetPipeline.ToInformation();
         }
 
-        public async Task DeletePipelineAsync(long projectId, long pipelineId)
+        public async Task DeletePipelineAsync(int projectId, int pipelineId)
         {
             await _data.Pipelines.RemovePipelineAsync(projectId, pipelineId);
             await _data.SaveAsync();

@@ -7,15 +7,13 @@ namespace Aurora.Core.Data.Services
     public class AssetsService
     {
         private readonly DatabaseContext _context;
-        private readonly IdentifierGenerator _idGenerator;
 
-        public AssetsService(DatabaseContext context, IdentifierGenerator idGenerator)
+        public AssetsService(DatabaseContext context)
         {
             _context = context;
-            _idGenerator = idGenerator;
         }
 
-        public async Task<Asset> GetAssetAsync(long projectId, long assetId)
+        public async Task<Asset> GetAssetAsync(int projectId, int assetId)
         {
             Asset? targetAsset = await _context.Assets.Where(a => a.Id == assetId && a.Project.Id == projectId).FirstOrDefaultAsync();
             if (targetAsset == null)
@@ -25,14 +23,14 @@ namespace Aurora.Core.Data.Services
             return targetAsset;
         }
 
-        public async Task<Asset> AddAssetAsync(string name, string description, AssetType assetType, Project project)
+        public async Task<Asset> AddAssetAsync(string name, string description, AssetKind assetKind, Project project)
         {
-            Asset newAsset = new(name, description, assetType, project);
+            Asset newAsset = new(_context, name, description, assetKind, project);
             await _context.Assets.AddAsync(newAsset);
             return newAsset;
         }
 
-        public async Task RemoveAssetAsync(long projectId, long assetId)
+        public async Task RemoveAssetAsync(int projectId, int assetId)
         {
             Asset? targetAsset = await _context.Assets.Where(a => a.Id == assetId && a.Project.Id == projectId).FirstOrDefaultAsync();
             if (targetAsset == null)
@@ -42,38 +40,38 @@ namespace Aurora.Core.Data.Services
             _context.Assets.Remove(targetAsset);
         }
 
-        public async Task<AssetType> GetAssetTypeAsync(long projectId, long assetTypeId)
+        public async Task<AssetKind> GetAssetKindAsync(int projectId, int assetTypeId)
         {
-            AssetType? targetType = await _context.AssetTypes.Where(t => t.Id == assetTypeId && t.Project.Id == projectId).FirstOrDefaultAsync();
-            if (targetType == null)
+            AssetKind? targetKind = await _context.AssetKinds.Where(t => t.Id == assetTypeId && t.Project.Id == projectId).FirstOrDefaultAsync();
+            if (targetKind == null)
             {
                 throw new InvalidOperationException("The asset type does not exist.");
             }
-            return targetType;
+            return targetKind;
         }
 
-        public async Task<AssetType> AddAssetTypeAsync(string name, string description, Pipeline pipeline, Project project)
+        public async Task<AssetKind> AddAssetKindAsync(string name, string description, Pipeline pipeline, Project project)
         {
-            AssetType newType = new(name, description, pipeline, project);
-            await _context.AssetTypes.AddAsync(newType);
-            return newType;
+            AssetKind newKind = new(name, description, pipeline, project);
+            await _context.AssetKinds.AddAsync(newKind);
+            return newKind;
         }
 
-        public async Task RemoveAssetTypeAsync(long projectId, long assetTypeId)
+        public async Task RemoveAssetKindAsync(int projectId, int assetTypeId)
         {
-            AssetType? targetType = await _context.AssetTypes.Where(t => t.Id == assetTypeId && t.Project.Id == projectId).FirstOrDefaultAsync();
-            if (targetType == null)
+            AssetKind? targetKind = await _context.AssetKinds.Where(t => t.Id == assetTypeId && t.Project.Id == projectId).FirstOrDefaultAsync();
+            if (targetKind == null)
             {
                 throw new InvalidOperationException("The asset type does not exist.");
             }
-            if (await _context.Assets.AnyAsync(a => a.Type.Id == assetTypeId))
+            if (await _context.Assets.AnyAsync(a => a.Kind.Id == assetTypeId))
             {
                 throw new InvalidOperationException("The asset type is still in use.");
             }
-            _context.AssetTypes.Remove(targetType);
+            _context.AssetKinds.Remove(targetKind);
         }
 
-        public async Task<AssetVersion> GetAssetVersionAsync(long projectId, long assetId, long versionId)
+        public async Task<AssetVersion> GetAssetVersionAsync(int projectId, int assetId, int versionId)
         {
             AssetVersion? targetVersion = await _context.AssetVersions.Where(v => v.Id == versionId && v.Asset.Id == assetId && v.Asset.Project.Id == projectId).FirstOrDefaultAsync();
             if (targetVersion == null)
