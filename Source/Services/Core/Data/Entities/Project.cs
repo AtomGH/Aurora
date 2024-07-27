@@ -1,4 +1,5 @@
 ﻿using Aurora.Library.Common;
+using Aurora.Library.Projects;
 using Microsoft.EntityFrameworkCore;
 
 namespace Aurora.Core.Data.Entities
@@ -11,7 +12,7 @@ namespace Aurora.Core.Data.Entities
         /// <summary>
         /// The ID of the entity.
         /// </summary>
-        public long Id { get; set; }
+        public int Id { get; set; }
         /// <summary>
         /// The name of the project.
         /// </summary>
@@ -20,22 +21,21 @@ namespace Aurora.Core.Data.Entities
         /// The description for the project.
         /// </summary>
         public string Description { get; set; }
+        public ProjectType Type { get; set; }
+        public Project? ParentProject { get; private set; }
+        public int OwnerId { get; set; }
         /// <summary>
         /// The account that owns the project.
         /// </summary>
         public Account Owner { get; set; }
-        /// <summary>
-        /// The accounts that are members of this project.
-        /// </summary>
-        public ProjectMembersCollection Memebers { get; set; }
-        /// <summary>
-        /// Collection for Entity Framework Core to track related entities.
-        /// </summary>
-        public ICollection<Account> MemberCollection { get; set; }
+        public IQueryable<Account> Members { get; set; }
+        public List<int> MemberIds { get; set; }
         /// <summary>
         /// The creation date.
         /// </summary>
         public DateTime CreationDate { get; set; }
+
+        private readonly DatabaseContext _databaseContext;
 
         /// <summary>
         /// Instantiate a project entity.
@@ -45,14 +45,16 @@ namespace Aurora.Core.Data.Entities
         /// <param name="name"></param>
         /// <param name="description"></param>
         /// <param name="owner"></param>
-        public Project(DatabaseContext context, long id, string name, string description, Account owner)
+        public Project(DatabaseContext context, string name, string description, ProjectType type, Account owner)
         {
-            Id = id;
+            _databaseContext = context;
             Name = name;
             Description = description;
+            Type = type;
             Owner = owner;
-            MemberCollection = new List<Account>();
-            Memebers = new(this, context);
+            OwnerId = owner.Id;
+            Members = context.Accounts.Where(a => a.ProjectIds.Contains(Id));
+            MemberIds = new();
             CreationDate = DateTime.UtcNow;
         }
 
@@ -64,103 +66,20 @@ namespace Aurora.Core.Data.Entities
         {
             return true;
         }
-    }
 
-    /// <summary>
-    /// The interface that contains all bussiness logic to manipulate the members of a project.
-    /// </summary>
-    public class ProjectMembersCollection
-    {
-        private readonly DatabaseContext _context;
-        private readonly Project _project;
-        private readonly IQueryable<Account> _members;
-
-        /// <summary>
-        /// Instantiate a collection.
-        /// </summary>
-        /// <param name="project"></param>
-        /// <param name="context"></param>
-        public ProjectMembersCollection(Project project, DatabaseContext context)
+        public void SetParentProject(Project parent)
         {
-            _project = project;
-            _context = context;
-            _members = _context.Accounts.Where(a => a.ProjectCollection.Contains(_project));
-        }
-
-        /// <summary>
-        /// Get amount of members in the projects.
-        /// </summary>
-        /// <param name="start"></param>
-        /// <param name="limit"></param>
-        /// <returns></returns>
-        public async Task<List<Account>> GetAsync(long start, int limit)
-        {
-            return await _members.LongSkip(start - 1).Take(limit).ToListAsync();
-        }
-
-        /// <summary>
-        /// Get a specific member by ID.
-        /// </summary>
-        /// <param name="memberId">The account ID of the member in the project.</param>
-        /// <returns></returns>
-        /// <exception cref="InvalidDataException"></exception>
-        public async Task<Account> GetAsync(long memberId)
-        {
-            Account? targetAccount = await _members.FirstAsync(m => m.Id == memberId);
-            if (targetAccount == null)
+            if (Type == ProjectType.Series)
             {
-                throw new InvalidDataException("The account does not exist.");
-            }
-            return targetAccount;
-        }
-
-        /// <summary>
-        /// Count how many members are in the project.
-        /// </summary>
-        /// <returns></returns>
-        public async Task<long> CountAsync()
-        {
-            return await _members.LongCountAsync();
-        }
-
-        /// <summary>
-        /// Add an existing account to the project as a member.
-        /// </summary>
-        /// <param name="memberId">The ID of an existing account.</param>
-        /// <returns></returns>
-        /// <exception cref="InvalidDataException"></exception>
-        /// <exception cref="InvalidOperationException"></exception>
-        public async Task AddAsync(long memberId)
-        {
-            Account? newMember = await _context.Accounts.FindAsync(memberId);
-
-            if (newMember == null)
-            {
-                throw new InvalidDataException("The account does not exists.");
+                throw new ArgumentException("Series project cannot have parent project.");
             }
 
-            if (await _members.AnyAsync(p => p.Id == newMember.Id))
+            if (parent.Type != ProjectType.Series)
             {
-                throw new InvalidOperationException("The account is already a member of this project.");
+                throw new ArgumentException("The parent project must be series type.");
             }
 
-            _project.MemberCollection.Add(newMember);
-        }
-
-        /// <summary>
-        /// Remove a member from the project.
-        /// </summary>
-        /// <param name="memberId">The account ID of a member in the project.</param>
-        /// <returns></returns>
-        /// <exception cref="InvalidDataException"></exception>
-        public async Task RemoveAsync(long memberId)
-        {
-            Account? targetMember = await _members.FirstAsync(a => a.Id == memberId);
-            if (targetMember == null)
-            {
-                throw new InvalidDataException("The account does not exist in this project.");
-            }
-            _project.MemberCollection.Remove(targetMember);
+            ParentProject = parent;
         }
     }
 }

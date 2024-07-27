@@ -8,11 +8,11 @@ namespace Aurora.Core.Controllers
 {
     [Route("projects/{projectId}/assets/types/{typeId}/[controller]")]
     [ApiController]
-    public class PipelineStepsController : ControllerBase
+    public class PipelineController : ControllerBase
     {
-        private readonly AssetsApplication _application;
+        private readonly PipelinesApplication _application;
 
-        public PipelineStepsController(AssetsApplication application)
+        public PipelineController(PipelinesApplication application)
         {
             _application = application;
         }

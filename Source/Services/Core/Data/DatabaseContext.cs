@@ -18,8 +18,11 @@ namespace Aurora.Core.Data
         public DbSet<Account> Accounts { get; set; } = null!;
         public DbSet<Asset> Assets { get; set; } = null!;
         public DbSet<AssetVersion> AssetVersions { get; set; } = null!;
-        public DbSet<AssetType> AssetTypes { get; set; } = null!;
+        public DbSet<AssetKind> AssetKinds { get; set; } = null!;
         public DbSet<Pipeline> Pipelines { get; set; } = null!;
+        public DbSet<Tool> Tools { get; set; } = null!;
+        public DbSet<ToolVersion> ToolVersions { get; set; } = null!;
+        public DbSet<ToolPackage> ToolPackages { get; set; } = null!;
 
 
         /// <summary>

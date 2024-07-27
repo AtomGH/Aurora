@@ -13,7 +13,7 @@ namespace Aurora.Core.Data.Services
             _context = context;
         }
 
-        public async Task<Pipeline> GetPipelineAsync(long projectId, long pipelineId)
+        public async Task<Pipeline> GetPipelineAsync(int projectId, int pipelineId)
         {
             Pipeline? targetPipeline = await _context.Pipelines.Where(p => p.Id == pipelineId && p.Project.Id == projectId).FirstOrDefaultAsync();
             if (targetPipeline == null)
@@ -30,7 +30,7 @@ namespace Aurora.Core.Data.Services
             return newPipeline;
         }
 
-        public async Task RemovePipelineAsync(long projectId, long pipelineId)
+        public async Task RemovePipelineAsync(int projectId, int pipelineId)
         {
             Pipeline? targetPipeline = await _context.Pipelines.Where(p => p.Id == pipelineId && p.Project.Id == projectId).FirstOrDefaultAsync();
             if (targetPipeline == null)

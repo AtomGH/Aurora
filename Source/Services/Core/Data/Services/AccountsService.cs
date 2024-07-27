@@ -1,7 +1,5 @@
 ﻿using Aurora.Core.Data.Entities;
-using Aurora.Library.Common;
 using Aurora.Library.Accounts;
-using Microsoft.EntityFrameworkCore;
 
 namespace Aurora.Core.Data.Services
 {
@@ -11,17 +9,15 @@ namespace Aurora.Core.Data.Services
     public class AccountsService
     {
         private readonly DatabaseContext _context;
-        private readonly IdentifierGenerator _idGenerator;
 
         /// <summary>
         /// Instantiate a service entity repository.
         /// </summary>
         /// <param name="context"></param>
         /// <param name="idGenerator"></param>
-        public AccountsService(DatabaseContext context, IdentifierGenerator idGenerator)
+        public AccountsService(DatabaseContext context)
         {
             _context = context;
-            _idGenerator = idGenerator;
         }
 
         /// <summary>
@@ -30,7 +26,7 @@ namespace Aurora.Core.Data.Services
         /// <param name="accountId"></param>
         /// <returns></returns>
         /// <exception cref="InvalidDataException"></exception>
-        public async Task<Account> GetAsync(long accountId)
+        public async Task<Account> GetAsync(int accountId)
         {
             Account? targetAccount = await _context.Accounts.FindAsync(accountId);
             if (targetAccount == null)
@@ -48,7 +44,7 @@ namespace Aurora.Core.Data.Services
         /// <returns></returns>
         public async Task<Account> AddAsync(string accountName, AccountType type)
         {
-            Account newAccount = new(_context, _idGenerator.Get(), accountName, type);
+            Account newAccount = new(_context, accountName, type);
             await _context.Accounts.AddAsync(newAccount);
             return newAccount;
         }

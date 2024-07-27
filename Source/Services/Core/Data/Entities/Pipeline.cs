@@ -2,10 +2,11 @@
 {
     public class Pipeline
     {
-        public long Id { get; private set; }
+        public int Id { get; private set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public Dictionary<int, string> Steps { get; private set; }
+        public int ProjectId { get; private set; }
         public Project Project { get; private set; }
 
         public Pipeline(string name, string description, Project project)
@@ -14,6 +15,7 @@
             Description = description;
             Steps = new();
             Project = project;
+            ProjectId = project.Id;
         }
 
         private Pipeline()

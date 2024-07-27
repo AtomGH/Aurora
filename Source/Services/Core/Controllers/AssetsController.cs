@@ -25,7 +25,7 @@ namespace Aurora.Core.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetAsync(long projectId, long id)
+        public async Task<IActionResult> GetAsync(int projectId, int id)
         {
             AssetInformation targetAsset = await _application.GetAssetAsync(projectId, id);
             return Ok(targetAsset);
@@ -39,30 +39,30 @@ namespace Aurora.Core.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> RemoveAsync(long id, long projectId)
+        public async Task<IActionResult> RemoveAsync(int id, int projectId)
         {
-            await _application.DeleteAssetAsync(id, projectId);
+            await _application.DeleteAssetAsync(projectId, id);
             return Ok();
         }
 
         [HttpGet("{id}/versions")]
-        public async Task<IActionResult> QueryVersionsAsync(long id, long projectId, [FromQuery] RangeQueryParameter parameters)
+        public async Task<IActionResult> QueryVersionsAsync(int id, int projectId, [FromQuery] RangeQueryParameter parameters)
         {
-            RangeQueryResult<AssetVersionInformation> result = await _application.QueryAssetVersionsAsync(id, projectId, parameters);
+            RangeQueryResult<AssetVersionInformation> result = await _application.QueryAssetVersionsAsync(projectId, id, parameters);
             return Ok(result);
         }
 
         [HttpGet("{id}/versions/{versionId}")]
-        public async Task<IActionResult> GetVersionAsync(long id, long projectId, long versionId)
+        public async Task<IActionResult> GetVersionAsync(int id, int projectId, int versionId)
         {
-            AssetVersionInformation targetVersion = await _application.GetAssetVersionAsync(id, projectId, versionId);
+            AssetVersionInformation targetVersion = await _application.GetAssetVersionAsync(projectId, id, versionId);
             return Ok(targetVersion);
         }
 
         [HttpPost("{id}/versions")]
-        public async Task<IActionResult> CreateVersionAsync(long id, long projectId, CreateAssetVersionParameters parameters)
+        public async Task<IActionResult> CreateVersionAsync(int id, int projectId, CreateAssetVersionParameters parameters)
         {
-            AssetVersionInformation newVersion = await _application.AddAssetVersionAsync(id, projectId, parameters);
+            AssetVersionInformation newVersion = await _application.AddAssetVersionAsync(projectId, id, parameters);
             return Created("/projects/" + projectId + "/assets/" + id + "/versions/" + newVersion.Id, newVersion);
         }
     }

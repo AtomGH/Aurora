@@ -23,6 +23,7 @@ namespace Aurora.Library.Projects
         /// The description of the project.
         /// </summary>
         public string Description { get; set; } = string.Empty;
+        public ProjectType Type { get; set; } = ProjectType.None;
         /// <summary>
         /// The ID of the account who owns the project.
         /// </summary>

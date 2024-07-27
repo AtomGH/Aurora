@@ -29,10 +29,10 @@ namespace Aurora.Core.Data
         public DataService(DatabaseContext context, IdentifierGenerator idGenerator)
         {
             Database = context;
-            Accounts = new AccountsService(Database, idGenerator);
-            Projects = new ProjectsService(Database, idGenerator);
+            Accounts = new AccountsService(Database);
+            Projects = new ProjectsService(Database);
             Pipelines = new PipelinesService(Database);
-            Assets = new AssetsService(Database, idGenerator);
+            Assets = new AssetsService(Database);
         }
 
         /// <summary>

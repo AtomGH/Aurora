@@ -5,7 +5,7 @@ namespace Aurora.Core.Applications.Extensions
 {
     public static class AssetTypeExtension
     {
-        public static AssetTypeInformation ToInformation(this AssetType assetType)
+        public static AssetTypeInformation ToInformation(this AssetKind assetType)
         {
             return new()
             {
